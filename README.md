@@ -1,5 +1,5 @@
 ## Synopsis
-This librairie is a datamining process. it take as input a text and gives a score (int) which describe the orientation of opinion of the given text.
+This library is a datamining process. it take as input a text and gives a score (int) which describe the orientation of opinion of the given text.
 
 ## Code Example
 
@@ -18,7 +18,7 @@ The score is an int, and can have trees values :
 
 ## API Reference
 
-This result is a part of reseach work, here is some of our publication :
+This result is a part of research work, here is some of our publication :
 https://link.springer.com/chapter/10.1007%2F978-3-319-30298-0_43 
 http://ieeexplore.ieee.org/document/7847689/
 https://link.springer.com/chapter/10.1007/978-3-319-46568-5_35
@@ -42,10 +42,10 @@ V1.0 (current) : standard algorithm using openNLP and Dictionary, handle only fr
 
 ## License
 
-This api is published on MTI licence, please read "Licence" file for more information. 
+This api is published on MTI license, please read "License" file for more information. 
 
 
 ## references
-Here is a list of api as librairies used by pok-datamining :
-1/ Dictionnary : Feel (http://advanse.lirmm.fr/feel.php)
+Here is a list of api as libraries used by pok-datamining :
+1/ Dictionary : Feel (http://advanse.lirmm.fr/feel.php)
 2/ NLP : Apache openNLP (https://opennlp.apache.org/)

@@ -1,4 +1,4 @@
-package poc.algorithm.txt.process;
+package pok.algorithm.txt.process;
 
 public class Word {
 	

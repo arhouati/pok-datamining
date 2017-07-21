@@ -1,9 +1,9 @@
-package poc.algorithm;
+package pok.algorithm;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import poc.algorithm.txt.process.Word;
+import pok.algorithm.txt.process.Word;
 
 public class Scoring {
 	

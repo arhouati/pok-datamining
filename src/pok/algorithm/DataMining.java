@@ -1,4 +1,4 @@
-package poc.algorithm;
+package pok.algorithm;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -7,10 +7,10 @@ import java.util.List;
 
 import com.opencsv.CSVReader;
 
-import poc.algorithm.txt.process.DictionaryTagger;
-import poc.algorithm.txt.process.Structure;
-import poc.algorithm.txt.process.Text;
-import poc.algorithm.txt.process.Word;
+import pok.algorithm.txt.process.DictionaryTagger;
+import pok.algorithm.txt.process.Structure;
+import pok.algorithm.txt.process.Text;
+import pok.algorithm.txt.process.Word;
 
 /**
 * <h1>Main Script</h1>

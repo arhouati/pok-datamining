@@ -1,4 +1,4 @@
-package poc.algorithm.txt.process;
+package pok.algorithm.txt.process;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.opencsv.CSVReader;
 
-import poc.tools.FrenchStemmer;
+import pok.tools.FrenchStemmer;
 
 // TODO implement singleton for loading dictionary and negation from CSV
 public class DictionaryTagger {

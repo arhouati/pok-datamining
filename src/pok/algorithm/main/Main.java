@@ -1,8 +1,8 @@
-package poc.algorithm.main;
+package pok.algorithm.main;
 
 import java.io.IOException;
 
-import poc.algorithm.DataMining;
+import pok.algorithm.DataMining;
 
 /**
 * <h1>Main Script</h1>

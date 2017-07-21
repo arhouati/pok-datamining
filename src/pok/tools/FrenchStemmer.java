@@ -1,6 +1,6 @@
 //package org.apache.lucene.analysis.fr;
 
-package poc.tools;
+package pok.tools;
 
 /**
  * Licensed to the Apache Software Foundation (ASF) under one or more

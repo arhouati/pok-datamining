@@ -1,4 +1,4 @@
-package poc.algorithm.txt.process;
+package pok.algorithm.txt.process;
 
 /**
 * <h1>Text pre-processing</h1>

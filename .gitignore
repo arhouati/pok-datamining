@@ -29,6 +29,6 @@ bin/
 .settings/*
 .project
 .classpath
-pom.properties
+*pom.properties
 
 

@@ -15,7 +15,7 @@ public class DictionaryTagger {
 	private static HashMap<String,String[]> negation;
 	
 	public static Word sentimentTagger(Word word) {
-				
+			
 			String wordName = word.getWord().toLowerCase();
 						
 			switch ( word.getTag() ) {
@@ -23,7 +23,8 @@ public class DictionaryTagger {
 					wordName = getInfinitiveVerbe(wordName);
 					word.setSentiment( getSentimentFromDictionary(wordName) );
 					break;
-					
+				
+				case "NC":
 				case "ADJ":	
 					
 					if( dictionary.get( getSingularNoun( wordName ) ) != null )
@@ -34,16 +35,21 @@ public class DictionaryTagger {
 					word.setSentiment( getSentimentFromDictionary(wordName) );
 
 					break;
-					
+				
+				
 				case "ADV":
 					
-					if( isNegation( wordName ) )
+					if( isNegation( wordName ) ){
 						word.setType( getNegationType( wordName ));
+						word.setSentiment( "neutral" );
+						break;
+					}
 					
 					word.setSentiment( getSentimentFromDictionary(wordName) );
+
 					break;
 				
-				case "NC":
+				
 				case "PONCT":
 				case "CLS":
 					word.setSentiment( "neutral" );

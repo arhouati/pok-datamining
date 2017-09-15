@@ -37,7 +37,6 @@ V2.0
 	Implement coreNLP (https://stanfordnlp.github.io/CoreNLP/) 
 	Implement DeapLearning (https://blog.statsbot.co/text-classifier-algorithms-in-machine-learning-acc115293278)
 	
-	
 V3.0 implemented Arabic language
 
 ## Release Note

@@ -15,6 +15,10 @@ public class Scoring {
 		for(ArrayList<Word> sentence : words)
 		{
 			int scoreSentence = 0;
+			
+			System.out.println("start Socring Sentence ----------------");
+
+			
 			for(Word word : sentence){
 				
 				if ( isFirstWord(word, sentence) ) {
@@ -30,6 +34,7 @@ public class Scoring {
 					Word prevWord = sentence.get( word.getId()-1);
 					
 					if (word.getSentiment().equals("positive")) {
+						
 						if (prevWord.isIncrement()) {
 							scoreSentence += 2;
 						} else if (prevWord.isDecrement()) {
@@ -59,8 +64,9 @@ public class Scoring {
 					
 					Word prevWord = sentence.get( word.getId()-1);
 					Word nextWord = sentence.get( word.getId()+1);
-					
+
 					if (word.getSentiment().equals("positive")) {
+						
 						if (prevWord.isIncrement()) {
 							scoreSentence += 2;
 						} else if (prevWord.isDecrement()) {
@@ -79,6 +85,8 @@ public class Scoring {
 						}
 					}
 					if (word.getSentiment().equals("negative")) {
+						
+						
 						if (prevWord.isIncrement()) {
 							scoreSentence -= 2;
 						} else if (prevWord.isDecrement()) {
@@ -92,6 +100,7 @@ public class Scoring {
 
 						else if ("negationAV".equals( prevWord.getType())
 								| "negationAP".equals( nextWord.getType() )) {
+
 							scoreSentence += 1;
 						} else {
 							scoreSentence -= 1;
@@ -100,8 +109,13 @@ public class Scoring {
 				}
 			}
 			
+			System.out.println("sentence score :" + scoreSentence);
+
+			System.out.println("end Socring Sentence ----------------");
+			
 			score += scoreSentence;
 		}
+		
 		
 		return score;
 	}

@@ -35,9 +35,11 @@ use GIT to track issues
 
 V2.0 
 	Implement coreNLP (https://stanfordnlp.github.io/CoreNLP/) 
+	
+V3.0
 	Implement DeapLearning (https://blog.statsbot.co/text-classifier-algorithms-in-machine-learning-acc115293278)
 	
-V3.0 implemented Arabic language
+V4.0 implemented Arabic language
 
 ## Release Note
 
@@ -52,3 +54,4 @@ This api is published on MTI license, please read "License" file for more inform
 Here is a list of api as libraries used by pok-datamining :
 1/ Dictionary : Feel (http://advanse.lirmm.fr/feel.php)
 2/ NLP : Apache openNLP (https://opennlp.apache.org/)
+3/ BabelMorph: a Multilingual Morphological Library for retrieving word inflections for nouns, verbs and adjectives based on Wiktionary. (https://github.com/raganato/BabelMorph)

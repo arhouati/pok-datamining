@@ -6,6 +6,9 @@ import java.util.List;
 
 import com.opencsv.CSVReader;
 
+import it.uniroma1.lcl.babelmorph.BabelMorph;
+import it.uniroma1.lcl.babelmorph.BabelMorphWord;
+import it.uniroma1.lcl.jlt.util.Language;
 import pok.tools.FrenchStemmer;
 
 // TODO implement singleton for loading dictionary and negation from CSV
@@ -14,13 +17,14 @@ public class DictionaryTagger {
 	private static HashMap<String,String[]> dictionary;
 	private static HashMap<String,String[]> negation;
 	
-	public static Word sentimentTagger(Word word) {
+	public static Word sentimentTagger(Word word) throws IOException {
 			
 			String wordName = word.getWord().toLowerCase();
 						
 			switch ( word.getTag() ) {
 				case "V":
-					wordName = getInfinitiveVerbe(wordName);
+					wordName = getInfinitiveVerb(wordName);
+					System.out.println(wordName);
 					word.setSentiment( getSentimentFromDictionary(wordName) );
 					break;
 				
@@ -101,20 +105,27 @@ public class DictionaryTagger {
 		if( dictionary.get(wordName) != null )
 			return dictionary.get(wordName)[2];
 		
-		// approximate search (used especially for verbs)
-		for( String word : dictionary.keySet()){
+		// Do not do the approximate search (used especially for verbs)
+		/*for( String word : dictionary.keySet()){
 			if( wordName.length() < word.length() && wordName.equals( word.substring(0, wordName.length())) ){
 				return dictionary.get(word)[2];
 			}
-		}
+		}*/
 		
 		return "neutral";
 	}
 		
 	// TODO improve method to get infinitive, today it just return a stemmed verbe
-	private static String getInfinitiveVerbe( String verbe ){
-		FrenchStemmer stemer = new FrenchStemmer();
-		return stemer.stem( verbe );
+	private static String getInfinitiveVerb( String verb ) throws IOException{
+		
+		BabelMorph bm = BabelMorph.getInstance();
+		
+		List<BabelMorphWord> bmwFromWord = bm.getMorphologyFromWord(Language.FR, verb);
+		
+		return bmwFromWord.get(0).getLemma().toString();	
+				
+		/* FrenchStemmer stemer = new FrenchStemmer();
+		return stemer.stem( verbe ); */
 		
 	}
 	
@@ -146,7 +157,6 @@ public class DictionaryTagger {
 		
 		return noun;
 	}
-		
 	
 	private static boolean isNegation( String ADV ){
 		return negation.get(ADV) != null ? true : false;

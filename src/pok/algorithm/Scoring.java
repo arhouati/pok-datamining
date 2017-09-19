@@ -109,9 +109,7 @@ public class Scoring {
 				}
 			}
 			
-			System.out.println("sentence score :" + scoreSentence);
-
-			System.out.println("end Socring Sentence ----------------");
+			System.out.println("Sentence score :" + scoreSentence);
 			
 			score += scoreSentence;
 		}

@@ -24,7 +24,6 @@ public class DictionaryTagger {
 			switch ( word.getTag() ) {
 				case "V":
 					wordName = getInfinitiveVerb(wordName);
-					System.out.println(wordName);
 					word.setSentiment( getSentimentFromDictionary(wordName) );
 					break;
 				
@@ -122,7 +121,7 @@ public class DictionaryTagger {
 		
 		List<BabelMorphWord> bmwFromWord = bm.getMorphologyFromWord(Language.FR, verb);
 		
-		return bmwFromWord.get(0).getLemma().toString();	
+		return bmwFromWord.size() > 1 ?  bmwFromWord.get(0).getLemma().toString() : verb;	
 				
 		/* FrenchStemmer stemer = new FrenchStemmer();
 		return stemer.stem( verbe ); */

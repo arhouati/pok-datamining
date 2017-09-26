@@ -28,10 +28,8 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		
-		// fr
-		//String text = "Non je ne suis pas prête à rejoindre Emmanuel Macron !";
-		String text = "ils  sont des méchants";
 		
+		String text = "une énorme promesse brisé";
 		String lang = "fr";
 		int score = 0;
 		try {

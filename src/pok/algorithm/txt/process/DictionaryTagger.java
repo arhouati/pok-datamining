@@ -22,25 +22,37 @@ public class DictionaryTagger {
 			String wordName = word.getWord().toLowerCase();
 						
 			switch ( word.getTag() ) {
-				case "V":
+			
+				case "V": // verb
+				case "VIMP": // imperative verb
+				case "VPP": // past participle verb
+				case "VPR": // present participle verb
 					wordName = getInfinitiveVerb(wordName);
+					System.out.println("Inf V :" + wordName);
+
+					word.setSentiment( getSentimentFromDictionary(wordName) );
+
+					break;
+
+				case "VINF": // infinitive verb
 					word.setSentiment( getSentimentFromDictionary(wordName) );
 					break;
-				
-				case "NC":
-				case "ADJ":	
 					
+				case "NC": // noun					
 					if( dictionary.get( getSingularNoun( wordName ) ) != null )
 						wordName = getSingularNoun( wordName );
 					else
 						wordName = getSingularNounWhithAl( wordName );
 					
 					word.setSentiment( getSentimentFromDictionary(wordName) );
-
 					break;
 				
-				
-				case "ADV":
+				case "ADJ":	 // adjective
+					wordName = getSingularAJD(wordName);
+					word.setSentiment( getSentimentFromDictionary(wordName) );
+					break;
+					
+				case "ADV": // adverb
 					
 					if( isNegation( wordName ) ){
 						word.setType( getNegationType( wordName ));
@@ -48,22 +60,35 @@ public class DictionaryTagger {
 						break;
 					}
 					
+					// TODO: test if ADV is increment or decrements
 					word.setSentiment( getSentimentFromDictionary(wordName) );
 
 					break;
-				
-				
-				case "PONCT":
-				case "CLS":
-					word.setSentiment( "neutral" );
-					break;
 					
+				case "CLS":
+			
+				// neutral words
+				case "PUNC":  // punctuation for coreNLP
+				case "PONCT": // punctuation for openNLP
+				case "NPP":	  // proper noun
+				case "ET": // foreign word 
+				case "ADJWH": // Interrogative adjective
+				case "CC": // conjunction and subordinating conjunction
+				case "P": // preposition
+				case "PREF": // prefix
+				case "PRO": // strong pronoun
+				case "PROREL": // relative pronoun
+				case "PROWH": // interrogative pronoun
+				case "ADVWH": // Interrogative adverb
+				case "CS":   // subordinating conjunction
+				case "DET":   // determiner
+				case "DETWH": // interrogative determiners
+				case "I":   // interjection
+
 				default:
 					word.setSentiment( "neutral" );
 					break;
 			}
-			
-			
 
 		return word;
 	}
@@ -104,31 +129,29 @@ public class DictionaryTagger {
 		if( dictionary.get(wordName) != null )
 			return dictionary.get(wordName)[2];
 		
-		// Do not do the approximate search (used especially for verbs)
-		/*for( String word : dictionary.keySet()){
-			if( wordName.length() < word.length() && wordName.equals( word.substring(0, wordName.length())) ){
-				return dictionary.get(word)[2];
-			}
-		}*/
-		
 		return "neutral";
 	}
 		
-	// TODO improve method to get infinitive, today it just return a stemmed verbe
 	private static String getInfinitiveVerb( String verb ) throws IOException{
 		
 		BabelMorph bm = BabelMorph.getInstance();
 		
 		List<BabelMorphWord> bmwFromWord = bm.getMorphologyFromWord(Language.FR, verb);
 		
-		return bmwFromWord.size() > 1 ?  bmwFromWord.get(0).getLemma().toString() : verb;	
-				
-		/* FrenchStemmer stemer = new FrenchStemmer();
-		return stemer.stem( verbe ); */
+		return bmwFromWord.size() >= 1 ?  bmwFromWord.get(0).getLemma().toString() : verb;	
+	}
+	
+	private static String getSingularAJD( String adjective ) throws IOException{
 		
+		BabelMorph bm = BabelMorph.getInstance();
+		
+		List<BabelMorphWord> bmwFromWord = bm.getMorphologyFromWord(Language.FR, adjective);
+		
+		return bmwFromWord.size() > 1 ?  bmwFromWord.get(0).getLemma().toString() : adjective;	
 	}
 	
 	private static String getSingularNoun( String noun ){
+		
 		if( noun.length() > 3)
 		{
 			if(  "eux".equals( noun.substring(noun.length() - 3, noun.length()) ) ||
@@ -141,10 +164,10 @@ public class DictionaryTagger {
 			
 			if( noun.charAt( noun.length() - 1 ) == 's' )
 				return noun.substring(0, noun.length() - 1);	
-
 		}
-		
+
 		return noun;
+		
 	}
 	
 	private static String getSingularNounWhithAl( String noun ){

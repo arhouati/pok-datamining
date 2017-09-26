@@ -6,11 +6,12 @@ public class Word {
 	private String word;
 	private String tag;
 	private String sentiment;
+	private int score;
 	private boolean increment;
 	private boolean decrement;
 	private String type;
 
-	public Word(Integer id, String word, String tag, String sentiment,
+	public Word(Integer id, String word, String tag, String sentiment, int score,
 			boolean increment, boolean decrement) {
 		super();
 		this.id = id;
@@ -18,6 +19,7 @@ public class Word {
 		this.tag = tag;
 		this.sentiment = sentiment;
 		this.increment = increment;
+		this.score = score;
 		this.decrement = decrement;
 	}
 
@@ -55,8 +57,17 @@ public class Word {
 
 	public void setSentiment(String sentiment) {
 		this.sentiment = sentiment;
+		this.score = this.sentiment.equals("positive") ? 1 : this.sentiment.equals("negative") ? -1 : 0;
 	}
 
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+	
 	public boolean isIncrement() {
 		return increment;
 	}

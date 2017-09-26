@@ -8,6 +8,7 @@ import pok.algorithm.txt.process.Word;
 public class Scoring {
 	
 	// TODO refactoring algorythm
+	// TODO handle increment and decrement proposition
 	public static int getContentScore( List<ArrayList<Word>> words) {
 		
 		int score = 0;
@@ -16,96 +17,49 @@ public class Scoring {
 		{
 			int scoreSentence = 0;
 			
+			int scoreVerb = 1;
+			
 			System.out.println("start Socring Sentence ----------------");
-
 			
 			for(Word word : sentence){
 				
-				if ( isFirstWord(word, sentence) ) {
-					
-					if (word.getSentiment().equals("positive")) {
-						scoreSentence += 1;
-					} else if (word.getSentiment().equals("negative")) {
-						scoreSentence -= 1;
-					} 
-					
-				}else if ( isLastWord( word, sentence ) ) {
-					
-					Word prevWord = sentence.get( word.getId()-1);
-					
-					if (word.getSentiment().equals("positive")) {
-						
-						if (prevWord.isIncrement()) {
-							scoreSentence += 2;
-						} else if (prevWord.isDecrement()) {
-							scoreSentence += 0;
-						} 
-						else if ("negationAV".equals( prevWord.getType() )) {
-							scoreSentence -= 1;
-						} else {
-							scoreSentence += 1;
-						}
-					}
-					if (word.getSentiment().equals("negative")) {
-						if (prevWord.isIncrement()) {
-							scoreSentence -= 2;
-						} else if (prevWord.isDecrement()) {
-							scoreSentence += 0;
-						}
-						
+				Word prevWord = ! isFirstWord(word, sentence) ? sentence.get( word.getId()-1 ) : new Word();
+				Word nextWord = ! isLastWord(word, sentence) ? sentence.get( word.getId()+1 ) : new Word();
 
-						else if ("negationAV".equals( prevWord.getType())) {
-							scoreSentence += 1;
-						} else {
-							scoreSentence -= 1;
-						}
-					} 
-				}else {
+				switch ( word.getTag() ) {
+					case "NC": // noun											
+					case "ADJ":
+					case "ADV":
+						if ( !"negationAV".equals( word.getType() )
+								&& !"negationAP".equals( word.getType() )
+								&& word.getScore() != 0)
+							scoreSentence = word.getScore() * scoreVerb;
+						else
+							scoreSentence += word.getScore();
+
+						break;
 					
-					Word prevWord = sentence.get( word.getId()-1);
-					Word nextWord = sentence.get( word.getId()+1);
+					case "V": // verb
+					case "VIMP": // imperative verb
+					case "VPP": // past participle verb
+					case "VPR":
+					case "VINF": // infinitive verb
 
-					if (word.getSentiment().equals("positive")) {
+						if ( "negationAV".equals( prevWord.getType() )
+								|| "negationAP".equals( nextWord.getType() )) {	
+							scoreVerb = word.getScore() != 0 ? word.getScore() * -1 * scoreVerb : -1;
+						}else{
+							scoreVerb = word.getScore() != 0 ? word.getScore() * scoreVerb : 1;
+						}
 						
-						if (prevWord.isIncrement()) {
-							scoreSentence += 2;
-						} else if (prevWord.isDecrement()) {
-							scoreSentence += 0;
-						} 
-						else if (nextWord.isIncrement()) {
-							scoreSentence += 2;
-						} else if (nextWord.isDecrement()) {
-							scoreSentence += 0;
+					default :
+						if ( "negationAV".equals( prevWord.getType() )
+								|| "negationAP".equals( nextWord.getType() )) {	
+							scoreSentence += word.getScore() != 0 ? word.getScore() * -1 : -1;
+						}else{
+							scoreSentence += word.getScore();
 						}
-						else if ("negationAV".equals( prevWord.getType() )
-								| "negationAP".equals( nextWord.getType() )) {
-							scoreSentence -= 1;
-						} else {
-							scoreSentence += 1;
-						}
-					}
-					if (word.getSentiment().equals("negative")) {
-						
-						
-						if (prevWord.isIncrement()) {
-							scoreSentence -= 2;
-						} else if (prevWord.isDecrement()) {
-							scoreSentence += 0;
-						}
-						else if (nextWord.isIncrement()) {
-							scoreSentence -= 2;
-						} else if (nextWord.isDecrement()) {
-							scoreSentence += 0;
-						}
-
-						else if ("negationAV".equals( prevWord.getType())
-								| "negationAP".equals( nextWord.getType() )) {
-
-							scoreSentence += 1;
-						} else {
-							scoreSentence -= 1;
-						}
-					}
+					
 				}
 			}
 			

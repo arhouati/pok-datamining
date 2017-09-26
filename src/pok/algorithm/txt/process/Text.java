@@ -80,7 +80,7 @@ public class Text {
 	 */
 	private static String addSpaceBetweenfirstPPandVerb(String text, String lang) {
 		
-		text = text.replace("'", " ' ");
+		text = text.replace("'", " ");
 		return text;
 	}
 

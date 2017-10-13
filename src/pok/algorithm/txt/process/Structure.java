@@ -5,6 +5,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import opennlp.tools.cmdline.parser.ParserTool;
+import opennlp.tools.parser.Parse;
+import opennlp.tools.parser.Parser;
+import opennlp.tools.parser.ParserFactory;
+import opennlp.tools.parser.ParserModel;
 import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSTaggerME;
 import opennlp.tools.sentdetect.SentenceDetectorME;
@@ -66,6 +71,15 @@ public class Structure {
 			}
 			
 			taggedSentences.add((ArrayList<Word>) taggedWords);
+			
+			// Getting Tree parser of sentence
+			/*InputStream parserModelStream = Structure.class.getClassLoader().getResourceAsStream("openNLPModels/"+ lang +"/"+ lang +"-parser-chunking.bin");
+			
+			ParserModel parserModel = new ParserModel( parserModelStream );
+			Parser parser = ParserFactory.create(parserModel);
+			Parse topParses[] = ParserTool.parseLine(sentence, parser, 1);
+			topParses[0].show();*/
+			
 		}
 	
 		return taggedSentences;

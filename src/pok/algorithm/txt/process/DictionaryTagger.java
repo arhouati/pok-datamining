@@ -28,8 +28,6 @@ public class DictionaryTagger {
 				case "VPP": // past participle verb
 				case "VPR": // present participle verb
 					wordName = getInfinitiveVerb(wordName);
-					System.out.println("Inf V :" + wordName);
-
 					word.setSentiment( getSentimentFromDictionary(wordName) );
 
 					break;

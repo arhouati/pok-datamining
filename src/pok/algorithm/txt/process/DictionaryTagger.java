@@ -51,7 +51,7 @@ public class DictionaryTagger {
 					break;
 					
 				case "ADV": // adverb
-					
+				case "N": // adverb	
 					if( isNegation( wordName ) ){
 						word.setType( getNegationType( wordName ));
 						word.setSentiment( "neutral" );

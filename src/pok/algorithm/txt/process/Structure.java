@@ -2,16 +2,24 @@ package pok.algorithm.txt.process;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import edu.stanford.nlp.ling.CoreAnnotations.PartOfSpeechAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.TextAnnotation;
 import edu.stanford.nlp.ling.CoreAnnotations.TokensAnnotation;
+
+
+
+
 import edu.stanford.nlp.ling.CoreLabel;
+import edu.stanford.nlp.ling.IndexedWord;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import edu.stanford.nlp.semgraph.SemanticGraph;
+import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations.EnhancedPlusPlusDependenciesAnnotation;
+import edu.stanford.nlp.semgraph.SemanticGraphFormatter;
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreeCoreAnnotations.TreeAnnotation;
 import edu.stanford.nlp.util.CoreMap;
@@ -27,7 +35,49 @@ import edu.stanford.nlp.util.PropertiesUtils;
 * @since   2017-05-26
 */
 public class Structure {
+	
+	static private Annotation document;
+	static private List<CoreMap> sentencesParser;
 
+	public static void initParser(String text, String lang) {
+		
+		// build pipeline
+		StanfordCoreNLP pipeline = new StanfordCoreNLP(
+			PropertiesUtils.asProperties(
+				"annotators", "tokenize,ssplit,pos,lemma,parse,depparse",
+				"ssplit.isOneSentence", "true",
+				"parse.model", "edu/stanford/nlp/models/srparser/frenchSR.ser.gz",
+				"pos.model", "edu/stanford/nlp/models/pos-tagger/french/french.tagger",
+				"depparse.model", "edu/stanford/nlp/models/parser/nndep/UD_French.gz",
+				"tokenize.language", "fr"));
+
+		document = new Annotation( text );
+		
+		pipeline.annotate(document);
+	}
+	
+	public static List<SemanticGraph> getDependecyGraph(){
+		
+		// this is the parse tree of the current sentence
+		// Tree tree = sentenceParser.get(TreeAnnotation.class);
+		// tree.pennPrint();
+		
+		List<SemanticGraph> dependencieText = new ArrayList<SemanticGraph>();
+
+		// this is the Stanford dependency graph of the current sentence
+		for(CoreMap sentenceParser: sentencesParser) {
+			SemanticGraph dependencieSent = sentenceParser.get( EnhancedPlusPlusDependenciesAnnotation.class );
+		 	
+			dependencieSent.prettyPrint();
+		 	
+			dependencieText.add(dependencieSent);
+
+		}
+		
+		return dependencieText;
+	}
+	
+	
 	/**
 	* This method takes as a parameter the text that will be analyzed :
 	* 	1/ Detect sentences of the text
@@ -36,25 +86,12 @@ public class Structure {
 	* @param text
 	* @return 
 	*/
-	public static List<ArrayList<Word>> WordTagger(String text, String lang) throws IOException {
+	public static List<ArrayList<Word>> WordTagger() throws IOException {
 		
 		List<ArrayList<Word>> taggedSentences = new ArrayList<ArrayList<Word>>();
 		List<Word> taggedWords = null;
 		
-		// build pipeline
-		StanfordCoreNLP pipeline = new StanfordCoreNLP(
-			PropertiesUtils.asProperties(
-				"annotators", "tokenize,ssplit,pos,lemma,parse",
-				"ssplit.isOneSentence", "true",
-				"parse.model", "edu/stanford/nlp/models/srparser/frenchSR.ser.gz",
-				"pos.model", "edu/stanford/nlp/models/pos-tagger/french/french.tagger",
-				"tokenize.language", "fr"));
-
-		Annotation document = new Annotation( text );
-
-		pipeline.annotate(document);
-		
-		List<CoreMap> sentencesParser = document.get( SentencesAnnotation.class );
+		sentencesParser = document.get( SentencesAnnotation.class );
 
 		for(CoreMap sentenceParser: sentencesParser) {
 
@@ -74,10 +111,6 @@ public class Structure {
 				i++;
 			
 			}
-			
-			// this is the parse tree of the current sentence
-			// Tree tree = sentenceParser.get(TreeAnnotation.class);
-			// tree.pennPrint();
 		}
 
 		taggedSentences.add((ArrayList<Word>) taggedWords);

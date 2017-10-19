@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.opencsv.CSVReader;
 
+import edu.stanford.nlp.semgraph.SemanticGraph;
 import pok.algorithm.txt.process.DictionaryTagger;
 import pok.algorithm.txt.process.Structure;
 import pok.algorithm.txt.process.Text;
@@ -30,7 +31,10 @@ public class DataMining {
 		text = Text.preprocessing( text, lang );
 		
 		System.out.println("poc :: Score :: word's text tagging - process of 'POS / Part of Speach' (Noun, Adjectif, verb...)");
-		List<ArrayList<Word>> words = Structure.WordTagger(text, lang);
+		
+		Structure.initParser(text, lang);
+		List<ArrayList<Word>> words = Structure.WordTagger();
+		List<SemanticGraph> dependencieText =  Structure.getDependecyGraph();
 
 		CSVReader dictionaryFile = new CSVReader(new FileReader("resources/dictionary/dictionary-fr.csv"));
 		CSVReader negationFile = new CSVReader(new FileReader("resources/dictionary/negation-fr.csv"));
@@ -55,7 +59,7 @@ public class DataMining {
 			System.out.println("poc :: Score :: end Sentence ----------- ");
 
 		}
-		return Scoring.getContentScore( words );
+		return Scoring.getContentScore( words, dependencieText );
 
 	}
 	

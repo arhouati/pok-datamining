@@ -19,18 +19,15 @@ public class Scoring {
 		int score = 0;
 		
 		for(SemanticGraph dependencySent : dependencieText){
-			
-			int scoreSentence = 0;
-			
+						
 			ArrayList<Word> sentence = words.get(i);
 			Collection<IndexedWord> roots = dependencySent.getRoots();
 			
 			for(IndexedWord root : roots){
 				
-				score = getDeepScore( root, dependencySent, sentence );
+				score += getDeepScore( root, dependencySent, sentence );
 			}	
 			
-			score += scoreSentence;
 		}
 
 		return score;
@@ -42,9 +39,7 @@ public class Scoring {
 		int deepScore = 0;
 		
 		score = getScoreWord( sentence.get(word.index() -1), sentence);
-		
-		System.out.println("Word : " + word.word() + " - Score : " + score  + " tag :" + word.tag());
-				
+						
 		for(IndexedWord child : dependencySent.getChildren( word ) ) {
 			
 				int chlidScore = getDeepScore( child, dependencySent, sentence );
@@ -53,7 +48,7 @@ public class Scoring {
 				
 				case "V": // verb
 				case "VIMP": // imperative verb
-				//case "VPP": // past participle verb
+				case "VPP": // past participle verb
 				case "VPR":
 				case "VINF": // infinitive verb
 					
@@ -66,7 +61,6 @@ public class Scoring {
 				}
 		}
 
-		System.out.println("deepScore : " + deepScore );
 
 		switch ( word.tag() ) {
 		

@@ -52,7 +52,7 @@ public class Scoring {
 				case "VPR":
 				case "VINF": // infinitive verb
 					
-					deepScore =  chlidScore != 0 ? deepScore != 0 ? chlidScore * deepScore : chlidScore : deepScore ;
+					deepScore =  chlidScore != 0 ? ( deepScore != 0 ? chlidScore * deepScore : chlidScore ) : deepScore ;
 					break;
 				
 				default:
@@ -70,14 +70,14 @@ public class Scoring {
 			case "VPR":
 			case "VINF": // infinitive verb
 				
-				score =  deepScore != 0 ? score != 0 ? deepScore * score : deepScore : score ;
+				score =  ( score ==-1 && deepScore == 1) || ( score == 1 && deepScore == -1)  ? ( score != 0 ? deepScore * score : deepScore ) :  score ;
 				break;
 				
 			case "NC": // noun											
 			case "ADJ":
 			case "ADV":
 				
-				score =  ( score ==-1 && deepScore == 1) ? deepScore * score : deepScore + score ;
+				score =  ( score ==-1 && deepScore == 1) || ( score == 1 && deepScore == -1)  ? deepScore * score : deepScore + score ;
 				break;
 				
 			default :

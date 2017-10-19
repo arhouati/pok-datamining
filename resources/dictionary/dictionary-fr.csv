@@ -12527,7 +12527,7 @@ id;word;polarity;joy;fear;sadness;anger;surprise;disgust
 12527;serviette;positive;0;0;0;0;0;0
 12528;serviette de table;positive;0;0;1;0;0;0
 12529;servile;negative;0;1;1;1;0;1
-12530;servir;negative;0;0;0;0;0;0
+12530;servir;positive;0;0;0;0;0;0
 12531;servir à le louche;positive;0;0;0;0;0;0
 12532;serviteur;positive;0;0;0;0;0;0
 12533;servitude;negative;0;1;1;1;0;0

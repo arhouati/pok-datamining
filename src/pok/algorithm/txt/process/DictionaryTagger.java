@@ -28,8 +28,6 @@ public class DictionaryTagger {
 				case "VPP": // past participle verb
 				case "VPR": // present participle verb
 					wordName = getInfinitiveVerb(wordName);
-					System.out.println("Inf V :" + wordName);
-
 					word.setSentiment( getSentimentFromDictionary(wordName) );
 
 					break;
@@ -49,11 +47,12 @@ public class DictionaryTagger {
 				
 				case "ADJ":	 // adjective
 					wordName = getSingularAJD(wordName);
+					System.out.println(wordName + " -------------------");
 					word.setSentiment( getSentimentFromDictionary(wordName) );
 					break;
 					
 				case "ADV": // adverb
-					
+				case "N": // adverb	
 					if( isNegation( wordName ) ){
 						word.setType( getNegationType( wordName ));
 						word.setSentiment( "neutral" );
@@ -146,11 +145,11 @@ public class DictionaryTagger {
 		BabelMorph bm = BabelMorph.getInstance();
 		
 		List<BabelMorphWord> bmwFromWord = bm.getMorphologyFromWord(Language.FR, adjective);
-		
-		return bmwFromWord.size() > 1 ?  bmwFromWord.get(0).getLemma().toString() : adjective;	
+
+		return bmwFromWord.size() >= 1 ?  bmwFromWord.get(0).getLemma().toString() : adjective;	
 	}
 	
-	private static String getSingularNoun( String noun ){
+	private static String getSingularNoun( String noun ) throws IOException{
 		
 		if( noun.length() > 3)
 		{
@@ -166,7 +165,10 @@ public class DictionaryTagger {
 				return noun.substring(0, noun.length() - 1);	
 		}
 
-		return noun;
+		BabelMorph bm = BabelMorph.getInstance();
+		List<BabelMorphWord> bmwFromWord = bm.getMorphologyFromWord(Language.FR, noun);
+
+		return bmwFromWord.size() >= 1 ?  bmwFromWord.get(0).getLemma().toString() : noun;	
 		
 	}
 	

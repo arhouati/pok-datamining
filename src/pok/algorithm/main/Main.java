@@ -29,7 +29,7 @@ public class Main {
 	public static void main(String[] args) {
 		
 		
-		String text = "une énorme promesse brisé";
+		String text = "Cette photo est jolie";
 		String lang = "fr";
 		int score = 0;
 		try {

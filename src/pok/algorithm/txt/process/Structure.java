@@ -1,20 +1,27 @@
 package pok.algorithm.txt.process;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-import opennlp.tools.cmdline.parser.ParserTool;
-import opennlp.tools.parser.Parse;
-import opennlp.tools.parser.Parser;
-import opennlp.tools.parser.ParserFactory;
-import opennlp.tools.parser.ParserModel;
-import opennlp.tools.postag.POSModel;
-import opennlp.tools.postag.POSTaggerME;
-import opennlp.tools.sentdetect.SentenceDetectorME;
-import opennlp.tools.sentdetect.SentenceModel;
-import opennlp.tools.tokenize.WhitespaceTokenizer;
+
+import edu.stanford.nlp.ling.CoreAnnotations.PartOfSpeechAnnotation;
+import edu.stanford.nlp.ling.CoreAnnotations.SentencesAnnotation;
+import edu.stanford.nlp.ling.CoreAnnotations.TextAnnotation;
+import edu.stanford.nlp.ling.CoreAnnotations.TokensAnnotation;
+import edu.stanford.nlp.ling.CoreLabel;
+import edu.stanford.nlp.ling.IndexedWord;
+import edu.stanford.nlp.pipeline.Annotation;
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import edu.stanford.nlp.semgraph.SemanticGraph;
+import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations.EnhancedPlusPlusDependenciesAnnotation;
+import edu.stanford.nlp.semgraph.SemanticGraphFormatter;
+import edu.stanford.nlp.trees.Tree;
+import edu.stanford.nlp.trees.TreeCoreAnnotations.TreeAnnotation;
+import edu.stanford.nlp.util.CoreMap;
+import edu.stanford.nlp.util.PropertiesUtils;
+
 
 /**
 * <h1>Structure</h1>
@@ -26,9 +33,48 @@ import opennlp.tools.tokenize.WhitespaceTokenizer;
 */
 public class Structure {
 	
-	//static Structure structure = new Structure();
-	//static ClassLoader classLoader = structure.getClass().getClassLoader();
+	static private Annotation document;
+	static private List<CoreMap> sentencesParser;
 
+	public static void initParser(String text, String lang) {
+		
+		// build pipeline
+		StanfordCoreNLP pipeline = new StanfordCoreNLP(
+			PropertiesUtils.asProperties(
+				"annotators", "tokenize,ssplit,pos,lemma,parse,depparse",
+				"ssplit.isOneSentence", "true",
+				"parse.model", "edu/stanford/nlp/models/srparser/frenchSR.ser.gz",
+				"pos.model", "edu/stanford/nlp/models/pos-tagger/french/french.tagger",
+				"depparse.model", "edu/stanford/nlp/models/parser/nndep/UD_French.gz",
+				"tokenize.language", "fr"));
+
+		document = new Annotation( text );
+		
+		pipeline.annotate(document);
+	}
+	
+	public static List<SemanticGraph> getDependecyGraph(){
+		
+		// this is the parse tree of the current sentence
+		// Tree tree = sentenceParser.get(TreeAnnotation.class);
+		// tree.pennPrint();
+		
+		List<SemanticGraph> dependencieText = new ArrayList<SemanticGraph>();
+
+		// this is the Stanford dependency graph of the current sentence
+		for(CoreMap sentenceParser: sentencesParser) {
+			SemanticGraph dependencieSent = sentenceParser.get( EnhancedPlusPlusDependenciesAnnotation.class );
+		 	
+			dependencieSent.prettyPrint();
+		 	
+			dependencieText.add(dependencieSent);
+
+		}
+		
+		return dependencieText;
+	}
+	
+	
 	/**
 	* This method takes as a parameter the text that will be analyzed :
 	* 	1/ Detect sentences of the text
@@ -37,38 +83,29 @@ public class Structure {
 	* @param text
 	* @return 
 	*/
-	public static List<ArrayList<Word>> WordTagger(String text, String lang) throws IOException {
+	public static List<ArrayList<Word>> WordTagger() throws IOException {
 		
 		List<ArrayList<Word>> taggedSentences = new ArrayList<ArrayList<Word>>();
-		List<Word> taggedWords;
-
+		List<Word> taggedWords = null;
 		
-		String[] sentences = sentenceDetect(text, lang);
-	
-		for (String sentence : sentences) {	
+		sentencesParser = document.get( SentencesAnnotation.class );
 
-			taggedWords = new ArrayList<Word>();
-			
-			InputStream partOfSpeachModel = Structure.class.getClassLoader().getResourceAsStream("openNLPModels/"+ lang +"/"+ lang +"-pos.bin");
+		for(CoreMap sentenceParser: sentencesParser) {
 
-			POSModel posModel = new POSModel(partOfSpeachModel);
-			POSTaggerME tagger = new POSTaggerME(posModel);
-			
-			String[] whitespaceTokenizerLine = WhitespaceTokenizer.INSTANCE.tokenize(sentence);
-			String[] tags = tagger.tag(whitespaceTokenizerLine);
-			
 			int i = 0;
-			for (String token : whitespaceTokenizerLine) {
-				Word word = new Word();
+			
+			taggedWords = new ArrayList<Word>();
+
+			for (CoreLabel token: sentenceParser.get( TokensAnnotation.class )) {
+			    
+			    Word word = new Word();
 				word.setId(i);
-				word.setWord(token);
-				word.setTag(tags[i]);
-				
+				word.setWord( token.get(TextAnnotation.class) );
+				word.setTag( token.get(PartOfSpeechAnnotation.class) );
 				
 				taggedWords.add(word);
 				
 				i++;
-			}
 			
 			taggedSentences.add((ArrayList<Word>) taggedWords);
 			
@@ -79,32 +116,13 @@ public class Structure {
 			Parser parser = ParserFactory.create(parserModel);
 			Parse topParses[] = ParserTool.parseLine(sentence, parser, 1);
 			topParses[0].show();*/
+			}
 			
+
 		}
-	
+
+		taggedSentences.add((ArrayList<Word>) taggedWords);
+
 		return taggedSentences;
-
 	}
-	
-	/**
-	 * this function return an array of sentences of a given text 
-	 * 
-	 * @param text
-	 * @return List of sentences
-	 */
-	 private static String[] sentenceDetect(String text, String lang) throws IOException {
-
-		InputStream frSentenceModel = Structure.class.getClassLoader().getResourceAsStream("openNLPModels/"+ lang +"/"+ lang +"-sent.bin");
-
-		SentenceModel sentModel = new SentenceModel(frSentenceModel);
-		SentenceDetectorME sentenceDetector = new SentenceDetectorME(sentModel);
-		
-		String[] sentences = sentenceDetector.sentDetect(text);
-		
-		frSentenceModel.close();
-		
-		return sentences;
-	}
-
-	
 }

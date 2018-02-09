@@ -1,0 +1,11 @@
+version: 2.0
+
+phases:
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - mvn package
+artifacts:
+  files:
+    - target/pok-datamining.war
+  discard-paths: yes

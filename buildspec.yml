@@ -4,7 +4,7 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
-      - mvn install:install-file -Dfile=lib/jltutils-2.1.jar -DgroupId=jltutils \ -DartifactId=jltutils -Dversion=2.1 -Dpackaging=jltutils
+      - mvn install:install-file -file=lib/jltutils-2.1.jar -groupId=jltutils \ -artifactId=jltutils -version=2.1 -packaging=jltutils
       - mvn package
 
 artifacts:

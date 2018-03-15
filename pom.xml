@@ -44,8 +44,6 @@
 	         <groupId>jltutils</groupId>
 	         <artifactId>jltutils</artifactId>
 	         <version>2.1</version>
-	         <scope>system</scope>
-	         <systemPath>./lib-mvn/jltutils/jltutils/2.1/jltutils-2.1.jar</systemPath>
     	</dependency>
 		
   		<dependency>

@@ -19,14 +19,6 @@
       </resource>
     </resources>
     
-    <repositories>
-	  <repository>
-	    <id>project.local</id>
-	    <name>project</name>
-	    <url>file:${project.basedir}/lib</url>
-	  </repository>
-	</repositories>
-	
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>

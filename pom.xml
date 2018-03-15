@@ -10,7 +10,7 @@
   
   <repositories>
     <repository>
-      <id>jltutils-2.1</id>
+      <id>lib-mvn</id>
       <url>file://${project.basedir}/lib-mvn/</url>
     </repository>
   </repositories>
@@ -40,6 +40,12 @@
   
 	<dependencies>
 	
+		<dependency>
+			<groupId>jltutils</groupId>
+			<artifactId>jltutils</artifactId>
+			<version>2.1</version>
+		</dependency>
+		
   		<dependency>
     		<groupId>edu.stanford.nlp</groupId>
     		<artifactId>stanford-corenlp</artifactId>

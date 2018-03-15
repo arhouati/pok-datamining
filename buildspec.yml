@@ -4,7 +4,6 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
-      - mvn clean compile
       - mvn package
 artifacts:
   files:

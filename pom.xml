@@ -11,7 +11,7 @@
   <repositories>
     <repository>
       <id>jltutils-2.1</id>
-      <url>file://${project.basedir}/lib/</url>
+      <url>file://${project.basedir}/lib-mvn/</url>
     </repository>
   </repositories>
   

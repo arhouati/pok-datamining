@@ -4,9 +4,10 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
+      - mvn package
       - mvn install:install-file -Dfile=lib/jltutils-2.1.jar -DpomFile=pom.xml
       - mvn install:install-file -Dfile=lib/stanford-french-corenlp-2017-06-09-models.jar -DpomFile=pom.xml
-      - mvn package
+
 artifacts:
   files:
     - target/pok-datamining.war

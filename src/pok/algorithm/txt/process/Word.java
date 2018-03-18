@@ -4,6 +4,7 @@ public class Word {
 	
 	private Integer id;
 	private String word;
+	private String lemmer;
 	private String tag;
 	private String sentiment;
 	private int score;
@@ -33,6 +34,14 @@ public class Word {
 
 	public void setWord(String word) {
 		this.word = word;
+	}
+	
+	public String getLemmer() {
+		return lemmer;
+	}
+
+	public void setLemmer(String lemmer) {
+		this.lemmer = lemmer;
 	}
 
 	public Integer getId() {

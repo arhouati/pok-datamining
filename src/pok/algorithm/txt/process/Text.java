@@ -1,5 +1,17 @@
 package pok.algorithm.txt.process;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
+import pok.algorithm.txt.process.Word;
+
+import it.uniroma1.lcl.babelmorph.BabelMorph;
+import it.uniroma1.lcl.babelmorph.BabelMorphWord;
+import it.uniroma1.lcl.jlt.util.Language;
+
 /**
 * <h1>Text pre-processing</h1>
 * <p>this class pre-process text. this step is the first step of DataMining</p>
@@ -10,19 +22,37 @@ package pok.algorithm.txt.process;
 */
 public class Text {
 	
-	/**
-	 * This method pre-process text to get the correct format that make easy to analysis
-	 * 
-	 * @param text
-	 * @return text processed
-	 */
-	public static String preprocessing(String text, String lang) {
+	final static Logger logger = Logger.getLogger(Text.class);
+
+	public static List<ArrayList<Word>> preprocessing(String text, String lang) throws IOException {	
 		
-		text = addDelimiterInthEndIFNotExist(text, lang);		
+		List<ArrayList<Word>> textList = tokenization(text, lang);
+		
+		textList = lemmatization(textList, lang);
+		
+		return textList;
+	}
+	
+	private static List<ArrayList<Word>> lemmatization(List<ArrayList<Word>> textList, String lang) throws IOException {
+				
+		for(ArrayList<Word> sentence : textList){
+			for(Word word : sentence){
+				String wordName = word.getWord().toLowerCase();
+				word.setLemmer( getLemma( wordName ) ); 
+			}	
+		}
+		return textList;
+	}
+	
+	private static List<ArrayList<Word>> tokenization(String text, String lang) throws IOException {
+		
+		text = addDelimiterInthEndIFNotExist(text, lang);
 		text = addSpaceBeforAndAfterDelimiter(text, lang);
 		text = addSpaceBetweenfirstPPandVerb(text, lang);
+		
+		CoreNlpTools nlpTools = CoreNlpTools.getInstance();
 
-		return text;
+		return nlpTools.wordTagger(text, lang);
 	}
 
 	/**
@@ -84,6 +114,13 @@ public class Text {
 		return text;
 	}
 
-	
-	
+	private static String getLemma( String verb ) throws IOException{
+		
+		BabelMorph bm = BabelMorph.getInstance();
+		
+		List<BabelMorphWord> bmwFromWord = bm.getMorphologyFromWord(Language.FR, verb);
+		
+		return bmwFromWord.size() >= 1 ?  bmwFromWord.get(0).getLemma().toString() : verb;	
+	}
+
 }

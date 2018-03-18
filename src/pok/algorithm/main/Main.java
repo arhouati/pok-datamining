@@ -2,6 +2,8 @@ package pok.algorithm.main;
 
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import pok.algorithm.DataMining;
 
 /**
@@ -16,36 +18,37 @@ import pok.algorithm.DataMining;
 * @since   2017-05-26
 * 
 */
-
-// TODO implement log4j for all classes
-// TODO implement specific exception 
-// TODO add processing language : EN and Arabic
-// TODO do some factory of all code
 public class Main {	
 	
+	final static Logger logger = Logger.getLogger(Main.class);
+
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		
 		
-		String text = "Cette photo est jolie";
+		String text = "Je suis mécontent";
 		String lang = "fr";
 		int score = 0;
 		try {
+			
 			score = DataMining.process( text , lang);
-		} catch (IOException e) {
-			e.printStackTrace();
+			
+		} catch (IOException e) 
+		{	
+			logger.error(e.getMessage());
 		}
 		
-		System.out.println("poc :: Score text :: " + score);
-
+		logger.info("poc :: text :: " + text);
+		logger.info("poc :: Score  :: " + score);
 		if( score > 0){
-			System.out.println("poc :: Orientation text :: Orientation The given text has a positive orientation.");
+			logger.info("poc :: Orientation text :: Orientation The given text has a positive orientation.");
 		}else if( score < 0 ){
-			System.out.println("poc :: Orientation text :: The given text has a negative orientation.");
+			logger.info("poc :: Orientation text :: The given text has a negative orientation.");
 		}else if( score == 0){
-			System.out.println("poc :: Orientation text :: The given text has a neutral orientation.");
+			logger.info("poc :: Orientation text :: The given text has a neutral orientation.");
 		}
+	
 	}
 }

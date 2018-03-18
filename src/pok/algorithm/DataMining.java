@@ -1,15 +1,12 @@
 package pok.algorithm;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.opencsv.CSVReader;
+import org.apache.log4j.Logger;
 
-import edu.stanford.nlp.semgraph.SemanticGraph;
-import pok.algorithm.txt.process.DictionaryTagger;
-import pok.algorithm.txt.process.Structure;
+import pok.algorithm.dictionary.DictionaryScoring;
 import pok.algorithm.txt.process.Text;
 import pok.algorithm.txt.process.Word;
 
@@ -22,48 +19,34 @@ import pok.algorithm.txt.process.Word;
 * 
 */
 public class DataMining {
+	
+	final static Logger logger = Logger.getLogger(DataMining.class);
 
 	public static int process(String text, String lang) throws IOException {
 
-		System.out.println("poc :: Score :: text preprocessing");
-		System.out.println("poc :: Score :: text :: "+ text +"("+ lang +")");
-
-		text = Text.preprocessing( text, lang );
+		if(logger.isDebugEnabled()){
+		    logger.debug("poc :: Score :: text preprocessing :: " + text);
+		}
 		
-		System.out.println("poc :: Score :: word's text tagging - process of 'POS / Part of Speach' (Noun, Adjectif, verb...)");
+		List<ArrayList<Word>> formatedText = Text.preprocessing( text, lang );
 		
-		Structure.initParser(text, lang);
-		List<ArrayList<Word>> words = Structure.WordTagger();
-		List<SemanticGraph> dependencieText =  Structure.getDependecyGraph();
-
-		CSVReader dictionaryFile = new CSVReader(new FileReader("resources/dictionary/dictionary-fr.csv"));
-		CSVReader negationFile = new CSVReader(new FileReader("resources/dictionary/negation-fr.csv"));
+		DictionaryScoring opinionMiningAlgo = new DictionaryScoring();
+		int score = opinionMiningAlgo.getContentScore( formatedText );
 		
-		DictionaryTagger.loadDictionaryFromCSV( dictionaryFile );
-		DictionaryTagger.loadNegationFromCSV( negationFile );
-
-		
-		for(ArrayList<Word> sentences : words)
-		{
-			for(Word word : sentences){
-				word = DictionaryTagger.sentimentTagger( word );
+		if(logger.isDebugEnabled()){
+			for(ArrayList<Word> sentences : formatedText)
+			{
+				logger.debug("poc :: Score :: start Sentence ----------- ");
+				for(Word word : sentences){
+					logger.debug("poc :: Score :: word :: "  + word.getId() +" >> " + word.getWord() + " >> "+ word.getLemmer() + " >> " + word.getTag()  +" >> " + word.getSentiment()  +" >> " + word.getType());
+				}
+				logger.debug("poc :: Score :: end Sentence ----------- ");
 			}
 		}
-
-		for(ArrayList<Word> sentences : words)
-		{
-			System.out.println("poc :: Score :: start Sentence ----------- ");
-			for(Word word : sentences){
-				System.out.println("poc :: Score :: word :: "  + word.getId() +" >> " + word.getWord() + " >> " + word.getTag()  +" >> " + word.getSentiment()  +" >> " + word.getType());
-			}
-			System.out.println("poc :: Score :: end Sentence ----------- ");
-
-		}
-		return Scoring.getContentScore( words, dependencieText );
-
+		
+		return score;
+		
 	}
 	
-	
-	
-	
+
 }

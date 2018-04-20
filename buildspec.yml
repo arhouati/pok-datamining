@@ -4,6 +4,8 @@ phases:
   pre_build:
     commands:
       - mvn install:install-file -Dfile=./lib/jltutils-2.1.jar -DgroupId=jltutils -DartifactId=jltutils -Dversion=2.1 -Dpackaging=jar -DlocalRepositoryPath=./lib-mvn
+      - mvn install:install-file -Dfile=./lib/stanford-french-corenlp-2017-06-09-models.jar -DgroupId=stanford-french-corenlp -DartifactId=stanford-french-corenlp -Dversion=1.0 -Dpackaging=jar -DlocalRepositoryPath=./lib-mvn
+      - mvn clean install -U
   post_build:
     commands:
       - echo Build completed on `date`

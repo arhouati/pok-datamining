@@ -2,10 +2,12 @@
 *.class
 
 # local maven directory
-lib-mvn/*
+libmvn
+libmvn/*
 
 # Log file
 *.log
+log
 
 # BlueJ files
 *.ctxt

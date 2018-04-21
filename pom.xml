@@ -11,7 +11,7 @@
   <repositories>
     <repository>
       <id>libmvn</id>
-      <url>${project.basedir}/libmvn</url>
+      <url>file://${project.basedir}/libmvn</url>
     </repository>
   </repositories>
   

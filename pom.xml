@@ -10,8 +10,8 @@
   
   <repositories>
     <repository>
-      <id>lib-mvn</id>
-      <url>${project.basedir}/lib-mvn/</url>
+      <id>libmvn</id>
+      <url>${project.basedir}/libmvn</url>
     </repository>
   </repositories>
   

@@ -8,8 +8,8 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
-      - mvn -U clean install
-      
+      - mvn package
+
 artifacts:
   files:
     - target/pok-datamining.war

@@ -1,13 +1,13 @@
 # Compiled class file
 *.class
 
-# local maven directory
-libmvn
-libmvn/*
-
 # Log file
 *.log
 log
+/log/*
+
+# Maven local depdency
+libmvn
 
 # BlueJ files
 *.ctxt
@@ -26,7 +26,6 @@ log
 hs_err_pid*
 /target/
 target/*
-target/*/
 
 #eclipse
 bin/

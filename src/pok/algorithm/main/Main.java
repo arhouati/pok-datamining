@@ -27,8 +27,8 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		
-		
-		String text = "Je suis mécontent";
+
+		String text = "je suis très gentil";
 		String lang = "fr";
 		int score = 0;
 		try {

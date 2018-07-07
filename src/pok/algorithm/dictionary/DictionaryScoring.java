@@ -43,7 +43,7 @@ public class DictionaryScoring implements TextScorable{
 			Collection<IndexedWord> roots = dependencySent.getRoots();
 			
 			for(IndexedWord root : roots){
-				score += getDeepScore( root, dependencySent, sentence );
+				score += getDeepScore( root, dependencySent, sentence, 0 );
 			}
 			
 			i++;
@@ -52,34 +52,38 @@ public class DictionaryScoring implements TextScorable{
 		return score;
 	}
 	
-	private static int getDeepScore( IndexedWord word, SemanticGraph dependencySent, ArrayList<Word> sentence ){
+	private static int getDeepScore( IndexedWord word, SemanticGraph dependencySent, ArrayList<Word> sentence, int level ){
 		
 		int score = 0;
 		int deepScore = 0;
 		
+		level++;
+		
 		score = getScoreWord( sentence.get(word.index()-1), sentence);
-						
+		
 		for(IndexedWord child : dependencySent.getChildren( word ) ) {
 			
-				int chlidScore = getDeepScore( child, dependencySent, sentence );
+				int chlidScore = getDeepScore( child, dependencySent, sentence, level);
 				
 				switch ( child.tag() ) {
 				
-				case "V": // verb
-				case "VIMP": // imperative verb
-				case "VPP": // past participle verb
-				case "VPR":
-				case "VINF": // infinitive verb
+					case "V": // verb
+					case "VIMP": // imperative verb
+					case "VPP": // past participle verb
+					case "VPR":
+					case "VINF": // infinitive verb
+						
+						deepScore =  chlidScore != 0 ? ( deepScore != 0 ? chlidScore * deepScore : chlidScore ) : deepScore ;
+						break;
 					
-					deepScore =  chlidScore != 0 ? ( deepScore != 0 ? chlidScore * deepScore : chlidScore ) : deepScore ;
-					break;
-				
-				default:
-					deepScore += chlidScore;
-					
+					default:
+						deepScore =  chlidScore != 0 ? ( deepScore != 0 ? chlidScore * deepScore : chlidScore ) : deepScore ;
+						break;
 				}
-		}
 
+		}
+		
+		int scoreVerb = 0;
 		switch ( word.tag() ) {
 		
 			case "V": // verb
@@ -100,9 +104,12 @@ public class DictionaryScoring implements TextScorable{
 				
 			default :
 	
-				score += deepScore;
+				score = deepScore;
 				break;
 		}
+		
+		if(level == 2 || level == 1) 
+			System.out.println( level + "--  score = " + score +" | deepScore = " +  deepScore + " =====>" + word.originalText() );
 		
 		return score;
 	}

@@ -40,6 +40,18 @@
   
 	<dependencies>
 		
+		<dependency>
+    		<groupId>stanford-french-corenlp</groupId>
+    		<artifactId>stanford-french-corenlp</artifactId>
+    		<version>1.0</version>
+		</dependency>
+		
+  		<dependency>
+    		<groupId>jltutils</groupId>
+    		<artifactId>jltutils</artifactId>
+    		<version>2.1</version>
+		</dependency>
+		
   		<dependency>
     		<groupId>edu.stanford.nlp</groupId>
     		<artifactId>stanford-corenlp</artifactId>

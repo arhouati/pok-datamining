@@ -45,6 +45,7 @@ V4.0 implemented Arabic language
 
 V1.2 : standard algorithm using openNLP and Dictionary, handle only french text
 V2.0 (current) : standard algorithm using coreNLP and Dictionary, handle only french text
+V2.1 (current) : refactoring code, better performance and fixe bugs
 
 ## License
 

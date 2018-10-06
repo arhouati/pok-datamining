@@ -6,9 +6,6 @@
 log
 /log/*
 
-# Maven local depdency
-libmvn
-
 # BlueJ files
 *.ctxt
 
@@ -16,6 +13,7 @@ libmvn
 .mtj.tmp/
 
 # Package Files #
+*.jar
 *.war
 *.ear
 *.zip
@@ -31,8 +29,11 @@ target/*
 bin/
 .settings/
 .settings/*
+.settings/*/*
 .project
 .classpath
 *pom.properties
 
-
+#Hadoop output files
+/output/
+/output/*

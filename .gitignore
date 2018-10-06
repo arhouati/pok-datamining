@@ -37,3 +37,7 @@ bin/
 #Hadoop output files
 /output/
 /output/*
+
+#mvn local lib
+/libmvn/
+libmvn/*
